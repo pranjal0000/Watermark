@@ -1,0 +1,115 @@
+project: segmentation
+
+name: UNet
+
+dataloader: Own
+
+dir:
+  #Test_one: Exp/test_one_images
+  Exp: Exp
+  Output: Exp/Temporary
+  Output_Best: Exp/Best
+  Model_Output: Exp/Models
+  Model_Output_Best: Exp/Models_Best
+  Ensemble_Output: Exp/Ensemble_Output
+  Plots: Exp/Plots
+
+test_one:
+  transform: False
+  n_classes: 3
+  batch_size: 3
+  cpu_alloc: 1
+  Type: test_one
+  loader:
+    flag: False
+  image_size: 512
+  dir: Exp/test_one_images
+
+train:
+  transform: False
+  n_classes: 3
+  batch_size: 3
+  cpu_alloc: 1
+  Type: train
+  loader:
+    flag: False
+  image_size: 512
+  dir: Datasets/train
+
+test:
+  transform: False
+  n_classes: 3
+  batch_size: 1
+  cpu_alloc: 1
+  Type: test
+  loader:
+    flag: False
+  image_size: 512
+  dir: Datasets/test
+
+ensemble:
+  1: Exp/All_results/Best_overall_result
+  # 2: Exp/All_results/Best_Patches
+  3: Exp/All_results/Best_Spots
+  # 4: Exp/All_results/Best_Wrinkle
+ensemble_way: max_voting # avg_voting
+
+target_transform: False
+retrain: True
+# predictor_path: 'src/shape_predictor_68_face_landmarks.dat'
+
+# Logging
+
+log_interval_steps: 100
+print_log_steps: 100
+test_now: 100
+update_config: 2
+cummulative_batch_steps: 1
+
+# Parameters
+
+image_size: 512
+padding: 0
+n_channels: 3
+n_classes: 3
+
+lr: 0.0001
+change_epoch: 10
+min_lr: 0.00001
+
+triangular_lr:
+  
+  min_lr: 0.00001
+  peak_lr: 0.001
+  step_size: 100
+  epoch_step: 1
+
+
+optimizer: Adam
+optimizer_new: False   #If want to refresh the optimizer parameters(Like when shifting optimizers from Adam to SGD or vice versa)
+lossf: CEL
+weighted_lossf_parameter : 0.5
+
+cuda: True
+seed: 2
+
+epoch: 1000
+
+PreTrained_net: False
+weighted_loss: True
+
+PreTrained_model:
+  check: True
+  # checkpoint: Exp/Models/35_100_checkpoint.pth.tar
+  # checkpoint_info: Exp/Models/35_100_info_checkpoint.pth.tar
+  checkpoint: Exp/Models_Best/1_0_checkpoint.pth.tar
+  checkpoint_info: Exp/Models_Best/1_0_info_checkpoint.pth.tar
+  checkpoint_best: Exp/Models_Best/0_0_checkpoint.pth.tar
+
+augmentation:
+  brightness: 0.1
+  contrast: 0.1
+  saturation: 0.1
+  hue: 0.1
+
+
